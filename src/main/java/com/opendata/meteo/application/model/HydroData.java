@@ -1,10 +1,13 @@
 package com.opendata.meteo.application.model;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @RequiredArgsConstructor
+@Getter
 public class HydroData {
 
     private String idStacji;
