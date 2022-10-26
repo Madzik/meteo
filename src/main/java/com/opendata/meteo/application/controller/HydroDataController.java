@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,14 +25,8 @@ public class HydroDataController {
     private final CsvFileService csvFileService;
 
     @GetMapping("/hydro")
-    public Mono<ResponseEntity<List<HydroData>>> getHydroData() {
-
-        return hydroDataService.getHydroData();
-    }
-
-    @GetMapping("/hydro2")
-    public ResponseEntity<String> getHydroData2() {
-        return hydroDataService.getDataAsString();
+    public ResponseEntity<List<HydroData>> getHydroData() {
+        return hydroDataService.getHydroData().block();
     }
 
     @GetMapping("/data/transfer")

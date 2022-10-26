@@ -3,6 +3,7 @@ package com.opendata.meteo.application.service;
 import com.opendata.meteo.application.model.HydroData;
 import com.opendata.meteo.document.application.service.ExcelDocumentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,11 +29,25 @@ public class HydroDataService {
                 .build();
 
         ClientResponse response = webClient.get()
-                .uri("/synop")
+                .uri("/hydro")
                 .exchange()
                 .block();
 
         return response.toEntityList(HydroData.class);
+    }
+
+    public Mono<List<Map<String, String>>> getHydroData3() {
+
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://danepubliczne.imgw.pl/api/data")
+                .build();
+
+        ClientResponse response = webClient.get()
+                .uri("/hydro")
+                .exchange()
+                .block();
+
+         return response.bodyToMono(new ParameterizedTypeReference<List<Map<String, String>>>() {});
     }
 
     public ResponseEntity<List> getDataAsList() {
