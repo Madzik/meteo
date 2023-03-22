@@ -3,6 +3,7 @@ package com.opendata.meteo.application.controller;
 import com.opendata.meteo.application.model.HydroData;
 import com.opendata.meteo.application.service.HydroDataService;
 import com.opendata.meteo.document.application.service.CsvFileService;
+import com.opendata.meteo.infrastructure.data.sync.DataSync;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class HydroDataController {
 
 
     private final HydroDataService hydroDataService;
+    private final DataSync dataSync;
     private final CsvFileService csvFileService;
 
     @GetMapping("/hydro")
@@ -32,6 +34,16 @@ public class HydroDataController {
     @GetMapping("/data/transfer")
     public ResponseEntity<List<Map<String, Object>>> transferData() {
         return ResponseEntity.of(Optional.of(hydroDataService.transferData()));
+    }
+
+    @GetMapping("/sync")
+    public ResponseEntity syncData() {
+        ResponseEntity<List<HydroData>> response = hydroDataService.getHydroData().block();
+
+        if (response != null && response.hasBody()) {
+            dataSync.syncData(response.getBody());
+        }
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/file", produces = "application/csv")
