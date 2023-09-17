@@ -8,4 +8,6 @@ public class Document {
     private byte [] content;
 
     private LocalDate createdAt;
+
+    private String createdBy;
 }
